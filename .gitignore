@@ -1,0 +1,52 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the `go run` command
+*.out
+
+# Go workspace
+/bin/
+/pkg/
+/vendor/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+node_modules/
+
+# Generated files by Go tools
+coverage.out
+
+# SQL migrations (if generated)
+*.sql~
+*.sql.bak
+
+# Debugger configurations
+__debug_bin
+
+# Temporary files and backups
+*.bak
+*.tmp
+
+# Specific tool configurations
+*.e
