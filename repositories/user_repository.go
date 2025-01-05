@@ -8,7 +8,7 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(ctx context.Context, user models.User) error
+	CreateUser(ctx context.Context, user *models.User) error
 	GetUsers(ctx context.Context) ([]models.User, error)
 }
 
@@ -18,12 +18,19 @@ func NewUserRepository() UserRepository {
 	return &userRepository{}
 }
 
-func (r *userRepository) CreateUser(ctx context.Context, user models.User) error {
-	_, err := db.Pool.Exec(ctx, "INSERT INTO m_user (id, name, username, email, password) VALUES ($1, $2, $3, $4, $5)", user.ID, user.Name, user.Username, user.Email, user.Password)
+func (r *userRepository) CreateUser(ctx context.Context, user *models.User) error {
+	// prepare the sql statement
+	query := "INSERT INTO m_user (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING id, created_at, updated_at"
+
+	// Execute the statement with the pool
+	row := db.Pool.QueryRow(ctx, query, user.Name, user.Email, user.Email, user.Password)
+
+	// Scan the returned ID
+	err := row.Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
-		log.Println("Error creating user:", err)
 		return err
 	}
+
 	return nil
 }
 

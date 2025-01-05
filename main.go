@@ -21,7 +21,7 @@ func main() {
 	app := fiber.New()
 
 	// Register routes
-	routes.RegisterTaskRoutes(app)
+	routes.RegisterUserRoutes(app)
 
 	// Start the server
 	log.Printf("Server is running on http://localhost:%s", config.AppPort)

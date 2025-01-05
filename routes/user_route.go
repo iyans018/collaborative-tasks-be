@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterTaskRoutes(app *fiber.App) {
+func RegisterUserRoutes(app *fiber.App) {
 	repo := repositories.NewUserRepository()
 	service := services.NewUserService(repo)
 	handler := handlers.NewUserHandler(service)

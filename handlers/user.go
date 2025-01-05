@@ -5,6 +5,7 @@ import (
 	"collaborative-task/services"
 
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserHandler struct {
@@ -21,9 +22,18 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	if err := h.service.CreateUser(c.Context(), user); err != nil {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to hash password"})
+	}
+	user.Password = string(hashedPassword)
+
+	err = h.service.CreateUser(c.Context(), &user)
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create user"})
 	}
+
+	user.Password = ""
 
 	return c.Status(fiber.StatusCreated).JSON(user)
 }
