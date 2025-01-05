@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *models.User) error
 	GetUsers(ctx context.Context) ([]models.User, error)
+	GetUserByUsername(ctx context.Context, username string) (*models.User, error)
 }
 
 type userRepository struct{}
@@ -52,4 +53,20 @@ func (r *userRepository) GetUsers(ctx context.Context) ([]models.User, error) {
 		users = append(users, user)
 	}
 	return users, nil
+}
+
+func (r *userRepository) GetUserByUsername(ctx context.Context, username string) (*models.User, error) {
+	query := `
+		SELECT id, name, username, email, password, created_at, updated_at
+		FROM m_user
+		WHERE username = $1 OR email = $2
+	`
+	row := db.Pool.QueryRow(ctx, query, username, username)
+
+	user := &models.User{}
+	if err := row.Scan(&user.ID, &user.Name, &user.Username, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

@@ -22,6 +22,7 @@ func main() {
 
 	// Register routes
 	routes.RegisterUserRoutes(app)
+	routes.RegisterAuthRoutes(app)
 
 	// Start the server
 	log.Printf("Server is running on http://localhost:%s", config.AppPort)
