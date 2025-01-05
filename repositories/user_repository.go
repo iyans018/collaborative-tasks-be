@@ -23,7 +23,7 @@ func (r *userRepository) CreateUser(ctx context.Context, user *models.User) erro
 	query := "INSERT INTO m_user (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING id, created_at, updated_at"
 
 	// Execute the statement with the pool
-	row := db.Pool.QueryRow(ctx, query, user.Name, user.Email, user.Email, user.Password)
+	row := db.Pool.QueryRow(ctx, query, user.Name, user.Username, user.Email, user.Password)
 
 	// Scan the returned ID
 	err := row.Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)

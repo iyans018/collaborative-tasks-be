@@ -13,6 +13,7 @@ func RegisterUserRoutes(app *fiber.App) {
 	service := services.NewUserService(repo)
 	handler := handlers.NewUserHandler(service)
 
-	app.Get("/users", handler.GetUsers)
-	app.Post("/users", handler.CreateUser)
+	api_v1 := app.Group("/api/v1")
+	api_v1.Get("/users", handler.GetUsers)
+	api_v1.Post("/users", handler.CreateUser)
 }
